@@ -1,0 +1,61 @@
+from machine import Pin, PWM
+from time import sleep
+
+# --- SERVO OBJECTS ---
+servo1 = PWM(Pin(16), freq=50)   # Servo A
+
+# --- SERVO SPEED CONTROL ---
+def set_speed(servo, speed):
+    """
+    speed = -1.0 (reverse) to 0 (stop) to +1.0 (forward)
+    """
+    min_us = 500
+    max_us = 2500
+    pulse = min_us + (speed + 1) * (max_us - min_us) / 2
+    duty = int((pulse / 20000) * 1023)
+    servo.duty(duty)
+
+# --- TIMING FOR EACH SERVO (independent) ---
+servo1_forward_time = 0.3
+servo1_stop_time    = 1.0
+servo1_reverse_time = 0.3
+
+# --- STATE MACHINES FOR INDEPENDENT CONTROL ---
+state1 = 0
+timer1 = 0
+
+print("Independent servo control running...")
+
+while True:
+
+    # ---------------------------------
+    # SERVO 1 STATE MACHINE
+    # ---------------------------------
+    if state1 == 0:  # forward
+        set_speed(servo1, -1.0)
+        if timer1 >= servo1_forward_time:
+            timer1 = 0
+            state1 = 1
+
+    elif state1 == 1:  # stop
+        set_speed(servo1, 0)
+        if timer1 >= servo1_stop_time:
+            timer1 = 0
+            state1 = 2
+
+    elif state1 == 2:  # reverse
+        set_speed(servo1, 1.0)
+        if timer1 >= servo1_reverse_time:
+            timer1 = 0
+            state1 = 3
+
+    elif state1 == 3:  # stop
+        set_speed(servo1, 0)
+        if timer1 >= servo1_stop_time:
+            timer1 = 0
+            state1 = 0
+
+    timer1 += 0.01
+
+
+
