@@ -61,7 +61,7 @@ def right_motor(speed):    # speed: -65535 to +65535
         IN7.value(0); IN8.value(0)
         rENA.duty_u16(0)
         
-def left_drive(speed):
+def left_shift(speed):
         IN1.value(0)
         IN2.value(1)
         IN3.value(1)
@@ -73,7 +73,7 @@ def left_drive(speed):
         IN8.value(1)
         rENA.duty_u16(speed)
 
-def right_drive(speed):
+def right_shift(speed):
         IN1.value(1)
         IN2.value(0)
         IN3.value(0)
@@ -97,7 +97,7 @@ def stop():
 #   ENES100 SETUP
 # ============================
 
-enes100.begin("towmaters", "seed", 11, 1116)
+enes100.begin("towmaters", "seed", 345, 1120)
 sleep(0.5)
 
 yStart = enes100.y
@@ -125,7 +125,7 @@ else:
 # =============================
 
 while True:
-    heading = enes100.heading
+    heading = enes100.theta
 
     # compute wrapped angle error
     error = desired_initial_heading - heading
@@ -134,9 +134,9 @@ while True:
 
     print("Heading:", heading, "Error:", error)
 
-    if abs(error) < HEADING_TOL:
+    if error < HEADING_TOL:
         stop()
-        print("Aligned! Starting navigation...")
+        #print("Aligned! Starting navigation...")
         sleep(0.5)
         break
 
@@ -159,7 +159,7 @@ while True:
     x = enes100.x
     y = enes100.y
     
-    heading = enes100.heading
+    heading = enes100.theta
 
     dx = x_target - x
     dy = y_target - y
@@ -167,7 +167,7 @@ while True:
 
     if distance < POSITION_TOL:
         stop()
-        print("Arrived at target!")
+        #print("Arrived at target!")
         enes100.print("Arrived at target!")
         break
 
@@ -178,7 +178,7 @@ while True:
     if error > math.pi: error -= 2*math.pi
     if error < -math.pi: error += 2*math.pi
 
-    if abs(error) > HEADING_TOL:
+    if error > HEADING_TOL:
         # turn to correct heading
         turn_speed = 25000
         if error > 0:
@@ -204,7 +204,7 @@ while True:
     x = enes100.x
     y = enes100.y
     
-    heading = enes100.heading
+    heading = enes100.theta
 
     dx = x_target2 - x
     dy = y_target2 - y
@@ -212,7 +212,7 @@ while True:
 
     if distance < POSITION_TOL:
         stop()
-        print("Arrived at wall!")
+        #print("Arrived at wall!")
         enes100.print("Arrived at wall!")
         break
 
@@ -223,7 +223,7 @@ while True:
     if error > math.pi: error -= 2*math.pi
     if error < -math.pi: error += 2*math.pi
 
-    if abs(error) > HEADING_TOL:
+    if error > HEADING_TOL:
         # turn to correct heading
         turn_speed = 25000
         if error > 0:
@@ -246,7 +246,7 @@ while True:
     x = enes100.x
     y = enes100.y
     
-    heading = enes100.heading
+    heading = enes100.theta
 
     dx = x_target3 - x
     dy = y_target3 - y
@@ -265,7 +265,7 @@ while True:
     if error > math.pi: error -= 2*math.pi
     if error < -math.pi: error += 2*math.pi
 
-    if abs(error) > HEADING_TOL:
+    if error > HEADING_TOL:
         # turn to correct heading
         turn_speed = 25000
         if error > 0:
