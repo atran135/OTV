@@ -2,9 +2,9 @@ from machine import Pin, PWM
 from time import sleep
 
 # --- SERVO OBJECTS ---
-servo1 = PWM(Pin(16), freq=50)   # Servo A (runs once) <- ARM SERVO
-servo2 = PWM(Pin(12), freq=50)   # Servo B (runs once) <- ARM SERVO
-servo3 = PWM(Pin(14), freq=50)   # Servo C (runs after 1 & 2) <- CLAW SERVO
+servo1 = PWM(Pin(16), freq=50)   # ARM SERVO 1
+servo2 = PWM(Pin(12), freq=50)   # ARM SERVO 2
+servo3 = PWM(Pin(14), freq=50)   # CLAW SERVO
 
 # --- SERVO SPEED CONTROL ---
 def set_speed(servo, speed):
@@ -17,61 +17,68 @@ def set_speed(servo, speed):
     duty = int((pulse / 20000) * 1023)
     servo.duty(duty)
 
-# Timings
-fwd = 1.0
-stp = 0.5
-rev = 1.0
+# -------------------------
+# TIMINGS FOR ARM SERVOS
+# -------------------------
+arm_fwd = 1.0
+arm_stop = 0.5
+arm_rev = 1.0
+
+# -------------------------
+# TIMINGS FOR CLAW SERVO (independent)
+# -------------------------
+claw_fwd = 0.8    # Forward duration for servo3
+claw_stop = 0.3   # Stop duration for servo3
+claw_rev = 0.6    # Reverse duration for servo3
 
 # ---------------------------------------------------------
-# STEP 1: Servo 1 and Servo 2 run ONCE
+# STEP 1: ARM SERVOS RUN ONCE
 # ---------------------------------------------------------
 
 # Forward
 set_speed(servo1, 1.0)
 set_speed(servo2, -1.0)
-sleep(fwd)
+sleep(arm_fwd)
 
 # Stop
 set_speed(servo1, 0)
 set_speed(servo2, 0)
-sleep(stp)
+sleep(arm_stop)
 
 # Reverse
 set_speed(servo1, -1.0)
 set_speed(servo2, 1.0)
-sleep(rev)
+sleep(arm_rev)
 
 # Stop
 set_speed(servo1, 0)
 set_speed(servo2, 0)
-sleep(stp)
+sleep(arm_stop)
 
-print("Servo 1 and 2 finished.")
-
+print("ARM servos finished.")
 
 # ---------------------------------------------------------
-# STEP 2: NOW Servo 3 runs ONCE
+# STEP 2: CLAW SERVO RUNS ONCE
 # ---------------------------------------------------------
 
 # Forward
-set_speed(servo3, 1.0)
-sleep(fwd)
+set_speed(servo3, -1.0)
+sleep(claw_fwd)
 
 # Stop
 set_speed(servo3, 0)
-sleep(stp)
+sleep(claw_stop)
 
 # Reverse
-set_speed(servo3, -1.0)
-sleep(rev)
+set_speed(servo3, 1.0)
+sleep(claw_rev)
 
 # Stop
 set_speed(servo3, 0)
-sleep(stp)
+sleep(claw_stop)
 
-print("Servo 3 finished. Program complete.")
-
+print("CLAW servo finished.")
 
 # ---------------------------------------------------------
 # EVERYTHING STOPS HERE
-# -----
+# ---------------------------------------------------------
