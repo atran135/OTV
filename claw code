@@ -16,7 +16,7 @@ def set_speed(servo, speed):
     duty = int((pulse / 20000) * 1023)
     servo.duty(duty)
 
-# --- TIMING FOR EACH SERVO (independent) ---
+# --- TIMING FOR EACH SERVO (EDIT THIS TO CHANGE HOW LONG THE SERVO TURNS---
 servo1_forward_time = 0.185
 servo1_stop_time    = 0.5
 servo1_reverse_time = 0.185
