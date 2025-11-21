@@ -2,8 +2,9 @@ from machine import Pin, PWM
 from time import sleep
 
 # --- SERVO OBJECTS ---
-servo1 = PWM(Pin(16), freq=50)   # Servo A
-servo2 = PWM(Pin(12), freq=50)   # Servo B
+servo1 = PWM(Pin(16), freq=50)   # Servo A (runs once) <- ARM SERVO
+servo2 = PWM(Pin(12), freq=50)   # Servo B (runs once) <- ARM SERVO
+servo3 = PWM(Pin(14), freq=50)   # Servo C (runs after 1 & 2) <- CLAW SERVO
 
 # --- SERVO SPEED CONTROL ---
 def set_speed(servo, speed):
@@ -16,87 +17,61 @@ def set_speed(servo, speed):
     duty = int((pulse / 20000) * 1023)
     servo.duty(duty)
 
-# --- TIMING FOR EACH SERVO (EDIT THIS TO CHANGE HOW LONG THE SERVO TURNS---
-servo1_forward_time = 0.185
-servo1_stop_time    = 0.5
-servo1_reverse_time = 0.185
+# Timings
+fwd = 1.0
+stp = 0.5
+rev = 1.0
 
-servo2_forward_time = 0.185
-servo2_stop_time    = 0.5
-servo2_reverse_time = 0.185
+# ---------------------------------------------------------
+# STEP 1: Servo 1 and Servo 2 run ONCE
+# ---------------------------------------------------------
 
-# --- STATE MACHINES FOR INDEPENDENT CONTROL ---
-state1 = 0
-timer1 = 0
+# Forward
+set_speed(servo1, 1.0)
+set_speed(servo2, -1.0)
+sleep(fwd)
 
-state2 = 0
-timer2 = 0
+# Stop
+set_speed(servo1, 0)
+set_speed(servo2, 0)
+sleep(stp)
 
-print("Independent servo control running...")
+# Reverse
+set_speed(servo1, -1.0)
+set_speed(servo2, 1.0)
+sleep(rev)
 
-while True:
+# Stop
+set_speed(servo1, 0)
+set_speed(servo2, 0)
+sleep(stp)
 
-    # ---------------------------------
-    # SERVO 1 STATE MACHINE
-    # ---------------------------------
-    if state1 == 0:  # forward
-        set_speed(servo1, 1.0)
-        if timer1 >= servo1_forward_time:
-            timer1 = 0
-            state1 = 1
-
-    elif state1 == 1:  # stop
-        set_speed(servo1, 0)
-        if timer1 >= servo1_stop_time:
-            timer1 = 0
-            state1 = 2
-
-    elif state1 == 2:  # reverse
-        set_speed(servo1, -1.0)
-        if timer1 >= servo1_reverse_time:
-            timer1 = 0
-            state1 = 3
-
-    elif state1 == 3:  # stop
-        set_speed(servo1, 0)
-        if timer1 >= servo1_stop_time:
-            timer1 = 0
-            state1 = 0
-
-    timer1 += 0.01
+print("Servo 1 and 2 finished.")
 
 
+# ---------------------------------------------------------
+# STEP 2: NOW Servo 3 runs ONCE
+# ---------------------------------------------------------
 
-    # ---------------------------------
-    # SERVO 2 STATE MACHINE
-    # ---------------------------------
-    if state2 == 0:  # forward
-        set_speed(servo2, 1.0)
-        if timer2 >= servo2_forward_time:
-            timer2 = 0
-            state2 = 1
+# Forward
+set_speed(servo3, 1.0)
+sleep(fwd)
 
-    elif state2 == 1:  # stop
-        set_speed(servo2, 0)
-        if timer2 >= servo2_stop_time:
-            timer2 = 0
-            state2 = 2
+# Stop
+set_speed(servo3, 0)
+sleep(stp)
 
-    elif state2 == 2:  # reverse
-        set_speed(servo2, -1.0)
-        if timer2 >= servo2_reverse_time:
-            timer2 = 0
-            state2 = 3
+# Reverse
+set_speed(servo3, -1.0)
+sleep(rev)
 
-    elif state2 == 3:  # stop
-        set_speed(servo2, 0)
-        if timer2 >= servo2_stop_time:
-            timer2 = 0
-            state2 = 0
+# Stop
+set_speed(servo3, 0)
+sleep(stp)
 
-    timer2 += 0.01
+print("Servo 3 finished. Program complete.")
 
 
-
-    # Loop timing resolution
-    sleep(0.01)
+# ---------------------------------------------------------
+# EVERYTHING STOPS HERE
+# -----
