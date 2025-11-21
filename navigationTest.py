@@ -156,8 +156,8 @@ while True:
 
 
 while True:
-    x = enes100.x
-    y = enes100.y
+    x = enes100.x #Sets x to aruco markers reading
+    y = enes100.y #Sets y to aruco markers reading
     
     heading = enes100.theta
 
@@ -197,12 +197,12 @@ while True:
 #   PHASE 3: DRIVE TO SIDE WALL
 # =================================
 
-x_target2 = 0.5
-y_target2 = 0.125
+x_target2 = 0.5 #End target of x
+y_target2 = 0.125 #End target of y
 
 while True:
-    x = enes100.x
-    y = enes100.y
+    x = enes100.x #Sets x to aruco markers reading
+    y = enes100.y #Sets y to aruco markers reading
     
     heading = enes100.theta
 
@@ -239,12 +239,12 @@ while True:
 #   PHASE 4: DRIVE ALONG SIDE WALL
 # =================================
 
-x_target3 = 3.75
-y_target3 = 0.125
+x_target3 = 3.75 #End target of x
+y_target3 = 0.125 #End target of y
 
 while True:
-    x = enes100.x
-    y = enes100.y
+    x = enes100.x #Sets x to aruco markers reading
+    y = enes100.y #Sets y to aruco markers reading
     
     heading = enes100.theta
 
