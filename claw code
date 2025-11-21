@@ -1,0 +1,102 @@
+from machine import Pin, PWM
+from time import sleep
+
+# --- SERVO OBJECTS ---
+servo1 = PWM(Pin(16), freq=50)   # Servo A
+servo2 = PWM(Pin(12), freq=50)   # Servo B
+
+# --- SERVO SPEED CONTROL ---
+def set_speed(servo, speed):
+    """
+    speed = -1.0 (reverse) to 0 (stop) to +1.0 (forward)
+    """
+    min_us = 500
+    max_us = 2500
+    pulse = min_us + (speed + 1) * (max_us - min_us) / 2
+    duty = int((pulse / 20000) * 1023)
+    servo.duty(duty)
+
+# --- TIMING FOR EACH SERVO (independent) ---
+servo1_forward_time = 0.185
+servo1_stop_time    = 0.5
+servo1_reverse_time = 0.185
+
+servo2_forward_time = 0.185
+servo2_stop_time    = 0.5
+servo2_reverse_time = 0.185
+
+# --- STATE MACHINES FOR INDEPENDENT CONTROL ---
+state1 = 0
+timer1 = 0
+
+state2 = 0
+timer2 = 0
+
+print("Independent servo control running...")
+
+while True:
+
+    # ---------------------------------
+    # SERVO 1 STATE MACHINE
+    # ---------------------------------
+    if state1 == 0:  # forward
+        set_speed(servo1, 1.0)
+        if timer1 >= servo1_forward_time:
+            timer1 = 0
+            state1 = 1
+
+    elif state1 == 1:  # stop
+        set_speed(servo1, 0)
+        if timer1 >= servo1_stop_time:
+            timer1 = 0
+            state1 = 2
+
+    elif state1 == 2:  # reverse
+        set_speed(servo1, -1.0)
+        if timer1 >= servo1_reverse_time:
+            timer1 = 0
+            state1 = 3
+
+    elif state1 == 3:  # stop
+        set_speed(servo1, 0)
+        if timer1 >= servo1_stop_time:
+            timer1 = 0
+            state1 = 0
+
+    timer1 += 0.01
+
+
+
+    # ---------------------------------
+    # SERVO 2 STATE MACHINE
+    # ---------------------------------
+    if state2 == 0:  # forward
+        set_speed(servo2, 1.0)
+        if timer2 >= servo2_forward_time:
+            timer2 = 0
+            state2 = 1
+
+    elif state2 == 1:  # stop
+        set_speed(servo2, 0)
+        if timer2 >= servo2_stop_time:
+            timer2 = 0
+            state2 = 2
+
+    elif state2 == 2:  # reverse
+        set_speed(servo2, -1.0)
+        if timer2 >= servo2_reverse_time:
+            timer2 = 0
+            state2 = 3
+
+    elif state2 == 3:  # stop
+        set_speed(servo2, 0)
+        if timer2 >= servo2_stop_time:
+            timer2 = 0
+            state2 = 0
+
+    timer2 += 0.01
+
+
+
+    # Loop timing resolution
+    sleep(0.01)
