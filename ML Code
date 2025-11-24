@@ -1,0 +1,67 @@
+from enes100ml import enes100
+from time import sleep
+
+enes100.begin("Towmaters", "SEED", 345, 1116, 16, 17)
+sleep(3)
+
+print(enes100.is_connected())
+
+# --------------------------
+# Check plot A
+# --------------------------
+print("Checking plot A...")
+result_A = enes100.ml_get_prediction(1)
+print("A =", result_A)
+
+
+if result_A == 0:
+    enes100.mission("LOCATION", "A")
+    print("Plantable substrate found at plot A")
+    enes100.print("Plantable substrate found at plot A")
+else:
+    # --------------------------
+    # Check plot B
+    # --------------------------
+    sleep(5)
+    print("Checking plot B...")
+    result_B = enes100.ml_get_prediction(1)
+    print("B =", result_B)
+   
+
+    if result_B == 0:
+        enes100.mission("LOCATION", "B")
+        print("Plantable substrate found at plot B")
+        enes100.print("Plantable substrate found at plot B")
+        
+    else:
+        # --------------------------
+        # Check plot C
+        # --------------------------
+        sleep(5)
+        print("Checking plot C...")
+        result_C = enes100.ml_get_prediction(1)
+        print("C =", result_C)
+       
+        if result_C == 0:
+            enes100.mission("LOCATION", "C")
+            print("Plantable substrate found at plot C")
+            enes100.print("Plantable substrate found at plot C")
+
+        else:
+            sleep(5)
+            # --------------------------
+            # Check plot D
+            # --------------------------
+            print("Checking plot D...")
+            result_D = enes100.ml_get_prediction(1)
+            print("D =", result_D)
+
+            if result_D == 0:
+                enes100.mission("LOCATION", "D")
+                print("Plantable substrate found at plot D")
+                enes100.print("Plantable substrate found at plot D")
+
+            else:
+                enes100.mission("LOCATION", "NONE")
+                print("No plantable substrate found.")
+
