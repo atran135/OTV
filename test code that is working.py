@@ -45,8 +45,8 @@ def stop():
 def forward(speed=0.6):
 
     # ===== Motor 1 (Front Left) — REVERSED FIXED =====
-    IN1.value(0)
-    IN2.value(1)
+    IN1.value(1)
+    IN2.value(0)
 
     # ===== Motor 2 (Front Right) =====
     IN3.value(1)
@@ -73,4 +73,5 @@ time.sleep(2)
 
 print("Stopping motors.")
 stop()
+
 
