@@ -148,7 +148,7 @@ while True:
 
     print("Heading:", heading, "Error:", error)
 
-    if error < HEADING_TOL:
+    if abs(error) < HEADING_TOL:
         stop()
         #print("Aligned! Starting navigation...")
         sleep(0.5)
@@ -192,7 +192,7 @@ while True:
     if error > math.pi: error -= 2*math.pi
     if error < -math.pi: error += 2*math.pi
 
-    if error > HEADING_TOL:
+    if abs(error) > HEADING_TOL:
         # turn to correct heading
         turn_speed = 25000
         if error > 0:
@@ -237,7 +237,7 @@ while True:
     if error > math.pi: error -= 2*math.pi
     if error < -math.pi: error += 2*math.pi
 
-    if error > HEADING_TOL:
+    if abs(error) > HEADING_TOL:
         # turn to correct heading
         turn_speed = 25000
         if error > 0:
@@ -279,7 +279,7 @@ while True:
     if error > math.pi: error -= 2*math.pi
     if error < -math.pi: error += 2*math.pi
 
-    if error > HEADING_TOL:
+    if abs(error) > HEADING_TOL:
         # turn to correct heading
         turn_speed = 25000
         if error > 0:
