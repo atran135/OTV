@@ -97,7 +97,7 @@ def stop():
 #   ENES100 SETUP
 # ============================
 
-enes100.begin("towmaters", "seed", 345, 1120)
+enes100.begin("towmaters", "seed", 345, 1116)
 sleep(0.5)
 
 yStart = enes100.y
@@ -115,8 +115,8 @@ if(enes100.y > 0.75):
     y_target = 0.5
 
 else:
-     desired_initial_heading = 0
-     # Target destination (meters)
+    desired_initial_heading = 0
+    # Target destination (meters)
     x_target = 0.5
     y_target = 1.5
     
@@ -187,9 +187,9 @@ while True:
             drive(turn_speed, -turn_speed)
     else:
         if(yStart > 0.75):
-            right_drive(40000)
+            right_shift(40000)
         else:
-            left_drive(40000)
+            left_shift(40000)
 
     sleep(1)
 
@@ -231,7 +231,7 @@ while True:
         else:
             drive(turn_speed, -turn_speed)
     else:
-            right_drive(40000)
+            right_shift(40000)
 
     sleep(1)
 
