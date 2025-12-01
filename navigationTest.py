@@ -162,7 +162,7 @@ while True:
         sleep(0.5)
         break
 
-    turn_speed = 25000
+    turn_speed = 40000
 
     if error > 0:
         drive(-turn_speed, turn_speed)   # turn left
@@ -202,7 +202,7 @@ while True:
 
     if abs(error) > HEADING_TOL:
         # turn to correct heading
-        turn_speed = 25000
+        turn_speed = 40000
         if error > 0:
             drive(-turn_speed, turn_speed)
         else:
@@ -247,7 +247,7 @@ while True:
 
     if abs(error) > HEADING_TOL:
         # turn to correct heading
-        turn_speed = 25000
+        turn_speed = 40000
         if error > 0:
             drive(-turn_speed, turn_speed)
         else:
@@ -289,7 +289,7 @@ while True:
 
     if abs(error) > HEADING_TOL:
         # turn to correct heading
-        turn_speed = 25000
+        turn_speed = 40000
         if error > 0:
             drive(-turn_speed, turn_speed)
         else:
