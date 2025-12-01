@@ -12,17 +12,21 @@ IN1 = Pin(5, Pin.OUT)
 IN2 = Pin(16, Pin.OUT)
 IN3 = Pin(17, Pin.OUT)
 IN4 = Pin(18, Pin.OUT)
-lENA = PWM(Pin(25))
+lENA = PWM(Pin(26))
+lENB = PWM(Pin(27))
 
 # ---Right driver--- #
 IN5 = Pin(12, Pin.OUT)
 IN6 = Pin(13, Pin.OUT)
 IN7 = Pin(19, Pin.OUT)
 IN8 = Pin(23, Pin.OUT)
-rENA = PWM(Pin(27))
+rENA = PWM(Pin(25))
+rENB = PWM(Pin(14))
 
 lENA.freq(1000)
+lENB.freq(1000)
 rENA.freq(1000)
+rENB.freq(1000)
 
 # --- MOTOR CONTROL ---
 def left_motor(speed):     # speed: -65535 to +65535
@@ -32,16 +36,19 @@ def left_motor(speed):     # speed: -65535 to +65535
         IN3.value(1)
         IN4.value(0)
         lENA.duty_u16(speed)
+        lENB.duty_u16(speed)
     elif speed < 0:        # backward
         IN1.value(0)
         IN2.value(1)
         IN3.value(0)
         IN4.value(1)
         lENA.duty_u16(-speed)
+        lENB.duty_u16(-speed)
     else:
         IN1.value(0); IN2.value(0)
         IN3.value(0); IN4.value(0)
         lENA.duty_u16(0)
+        lENB.duty_u16(0)
 
 def right_motor(speed):    # speed: -65535 to +65535
     if speed > 0:          # forward
@@ -50,16 +57,19 @@ def right_motor(speed):    # speed: -65535 to +65535
         IN7.value(1)
         IN8.value(0)
         rENA.duty_u16(speed)
+        rENB.duty_u16(speed)
     elif speed < 0:        # backward
         IN5.value(0)
         IN6.value(1)
         IN7.value(0)
         IN8.value(1)
         rENA.duty_u16(-speed)
+        rENB.duty_u16(-speed)
     else:
         IN5.value(0); IN6.value(0)
         IN7.value(0); IN8.value(0)
         rENA.duty_u16(0)
+        rENB.duty_u16(0)
         
 def left_shift(speed):
         IN1.value(0)
@@ -67,11 +77,13 @@ def left_shift(speed):
         IN3.value(1)
         IN4.value(0)
         lENA.duty_u16(speed)
+        lENB.duty_u16(speed)
         IN5.value(1)
         IN6.value(0)
         IN7.value(0)
         IN8.value(1)
         rENA.duty_u16(speed)
+        rENB.duty_u16(speed)
 
 def right_shift(speed):
         IN1.value(1)
@@ -79,11 +91,13 @@ def right_shift(speed):
         IN3.value(0)
         IN4.value(1)
         lENA.duty_u16(speed)
+        lENB.duty_u16(speed)
         IN5.value(0)
         IN6.value(1)
         IN7.value(1)
         IN8.value(0)
         rENA.duty_u16(speed)
+        rENB.duty_u16(speed)
 
 def drive(left_speed, right_speed):
     left_motor(left_speed)
