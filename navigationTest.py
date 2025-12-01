@@ -72,28 +72,36 @@ def right_motor(speed):    # speed: -65535 to +65535
         rENB.duty_u16(0)
         
 def left_shift(speed):
+        #front left
         IN1.value(0)
         IN2.value(1)
+        #rear left
         IN3.value(1)
         IN4.value(0)
         lENA.duty_u16(speed)
         lENB.duty_u16(speed)
+        #front right
         IN5.value(1)
         IN6.value(0)
+        #rear right
         IN7.value(0)
         IN8.value(1)
         rENA.duty_u16(speed)
         rENB.duty_u16(speed)
 
 def right_shift(speed):
+        #front left
         IN1.value(1)
         IN2.value(0)
+        #rear left
         IN3.value(0)
         IN4.value(1)
         lENA.duty_u16(speed)
         lENB.duty_u16(speed)
+        #front right
         IN5.value(0)
         IN6.value(1)
+        #rear right
         IN7.value(1)
         IN8.value(0)
         rENA.duty_u16(speed)
