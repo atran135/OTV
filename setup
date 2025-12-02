@@ -1,0 +1,143 @@
+from enes100 import enes100
+from machine import Pin, PWM
+from time import sleep
+import math
+
+# ============================
+#  MOTOR SETUP (Your hardware)
+# ============================
+
+# ---Left driver--- #
+IN1 = Pin(5, Pin.OUT)
+IN2 = Pin(16, Pin.OUT)
+IN3 = Pin(17, Pin.OUT)
+IN4 = Pin(18, Pin.OUT)
+lENA = PWM(Pin(26))
+lENB = PWM(Pin(27))
+
+# ---Right driver--- #
+IN5 = Pin(12, Pin.OUT)
+IN6 = Pin(13, Pin.OUT)
+IN7 = Pin(19, Pin.OUT)
+IN8 = Pin(23, Pin.OUT)
+rENA = PWM(Pin(25))
+rENB = PWM(Pin(14))
+
+lENA.freq(1000)
+lENB.freq(1000)
+rENA.freq(1000)
+rENB.freq(1000)
+
+# --- MOTOR CONTROL ---
+def left_motor(speed):     # speed: -65535 to +65535
+    if speed > 0:          # forward
+        IN1.value(1)
+        IN2.value(0)
+        IN3.value(1)
+        IN4.value(0)
+        lENA.duty_u16(speed)
+        lENB.duty_u16(speed)
+    elif speed < 0:        # backward
+        IN1.value(0)
+        IN2.value(1)
+        IN3.value(0)
+        IN4.value(1)
+        lENA.duty_u16(-speed)
+        lENB.duty_u16(-speed)
+    else:
+        IN1.value(0); IN2.value(0)
+        IN3.value(0); IN4.value(0)
+        lENA.duty_u16(0)
+        lENB.duty_u16(0)
+
+def right_motor(speed):    # speed: -65535 to +65535
+    if speed > 0:          # forward
+        IN5.value(1)
+        IN6.value(0)
+        IN7.value(1)
+        IN8.value(0)
+        rENA.duty_u16(speed)
+        rENB.duty_u16(speed)
+    elif speed < 0:        # backward
+        IN5.value(0)
+        IN6.value(1)
+        IN7.value(0)
+        IN8.value(1)
+        rENA.duty_u16(-speed)
+        rENB.duty_u16(-speed)
+    else:
+        IN5.value(0); IN6.value(0)
+        IN7.value(0); IN8.value(0)
+        rENA.duty_u16(0)
+        rENB.duty_u16(0)
+        
+def left_shift(speed):
+        #front left
+        IN1.value(0)
+        IN2.value(1)
+        #rear left
+IN3.value(1)
+        IN4.value(0)
+        lENA.duty_u16(speed)
+        lENB.duty_u16(speed)
+        #front right
+        IN5.value(1)
+        IN6.value(0)
+        #rear right
+        IN7.value(0)
+        IN8.value(1)
+        rENA.duty_u16(speed)
+        rENB.duty_u16(speed)
+
+def right_shift(speed):
+        #front left
+        IN1.value(1)
+        IN2.value(0)
+        #rear left
+        IN3.value(0)
+        IN4.value(1)
+        lENA.duty_u16(speed)
+        lENB.duty_u16(speed)
+        #front right
+        IN5.value(0)
+        IN6.value(1)
+        #rear right
+        IN7.value(1)
+        IN8.value(0)
+rENA.duty_u16(speed)
+        rENB.duty_u16(speed)
+
+def drive(left_speed, right_speed):
+    left_motor(left_speed)
+    right_motor(right_speed)
+
+def stop():
+    left_motor(0)
+    right_motor(0)
+
+# ============================
+#   ENES100 SETUP
+# ============================
+
+enes100.begin("towmaters", "seed", 345, 1120)
+sleep(0.5)
+
+yStart = enes100.y
+# Tolerances
+POSITION_TOL = 0.015
+HEADING_TOL = 0.03
+
+# ============================
+#   NAVIGATION LOOP
+# ============================
+if(enes100.y > 0.75):
+    desired_initial_heading = 0   
+    # Target destination (meters)
+    x_target = 0.5
+    y_target = 0.5
+
+else:
+    desired_initial_heading = 0
+    # Target destination (meters)
+    x_target = 0.5
+    y_target = 1.5
