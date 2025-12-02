@@ -126,6 +126,9 @@ yStart = enes100.y
 # Tolerances
 POSITION_TOL = 0.015
 HEADING_TOL = 0.03
+#checks if aruco is visible
+print(enes100.is_visible)
+
 
 # ============================
 #   NAVIGATION LOOP
