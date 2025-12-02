@@ -1,0 +1,30 @@
+# =============================
+#   PHASE 1: TURN TO HEADING
+# =============================
+enes100.print("Phase 1")
+while True:
+    heading = enes100.theta
+
+    # compute wrapped angle error
+    error = desired_initial_heading - heading
+    if error > math.pi: error -= 2*math.pi
+    if error < -math.pi: error += 2*math.pi
+
+    print("Heading:", heading, "Error:", error)
+
+    if abs(error) < HEADING_TOL:
+        stop()
+        #print("Aligned! Starting navigation...")
+        sleep(0.5)
+        break
+
+    turn_speed = 50000
+
+    if error > 0:
+        drive(-turn_speed, turn_speed)   # turn left
+    else:
+        drive(turn_speed, -turn_speed)   # turn right
+
+    sleep(0.5)
+sleep(5)
+enes100.print("theta:", enes100.theta)
