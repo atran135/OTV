@@ -22,10 +22,6 @@ while True:
     desired_heading = 0
     error = desired_heading - heading
 
-    # wrap error
-    if error > math.pi: error -= 2*math.pi
-    if error < -math.pi: error += 2*math.pi
-
     if abs(error) > HEADING_TOL:
         # turn to correct heading
         turn_speed = 50000
