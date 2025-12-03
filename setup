@@ -76,7 +76,7 @@ def left_shift(speed):
         IN1.value(0)
         IN2.value(1)
         #rear left
-IN3.value(1)
+        IN3.value(1)
         IN4.value(0)
         lENA.duty_u16(speed)
         lENB.duty_u16(speed)
@@ -104,7 +104,7 @@ def right_shift(speed):
         #rear right
         IN7.value(1)
         IN8.value(0)
-rENA.duty_u16(speed)
+        rENA.duty_u16(speed)
         rENB.duty_u16(speed)
 
 def drive(left_speed, right_speed):
