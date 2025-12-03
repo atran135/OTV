@@ -1,0 +1,64 @@
+# =============================
+#   PHASE 2: DRIVE TO TARGET
+# =============================
+
+enes100.print("Phase 2")
+
+# Determine shift direction
+shift_distance = 1.0  # meters
+speed = 50000
+
+start_x = enes100.x
+yStart = enes100.y
+
+# Shift left or right exactly 1 meter
+if yStart > 0.75:
+    # Shift right
+    while True:
+        current_x = enes100.x
+        distance_traveled = abs(current_x - start_x)
+        if distance_traveled >= shift_distance:
+            stop()
+            enes100.print("Shifted 1 meter right")
+            break
+        right_shift(speed)
+        sleep(0.1)
+else:
+    # Shift left
+    while True:
+        current_x = enes100.x
+        distance_traveled = abs(current_x - start_x)
+        if distance_traveled >= shift_distance:
+            stop()
+            enes100.print("Shifted 1 meter left")
+            break
+        left_shift(speed)
+        sleep(0.1)
+
+# Now proceed toward the target
+x_target = 0.5
+y_target = 0.5 if yStart > 0.75 else 1.5
+POSITION_TOL = 0.015
+HEADING_TOL = 0.1
+
+while True:
+    x = enes100.x
+    y = enes100.y
+    heading = enes100.theta
+
+    dx = x_target - x
+    dy = y_target - y
+    distance = math.sqrt(dx*dx + dy*dy)
+
+    if distance < POSITION_TOL:
+        stop()
+        enes100.print("Arrived at target!")
+        break
+
+    # Simple heading control (optional)
+    desired_heading = 0
+    error = desired_heading - heading
+
+    # Drive forward toward target
+    drive(50000, 50000)
+    sleep(0.1)
