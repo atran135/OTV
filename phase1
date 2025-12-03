@@ -8,7 +8,7 @@ while True:
     # compute wrapped angle error
     error = desired_initial_heading - heading
     
-    print("Heading:", heading, "Error:", error)
+    enes100.print("Heading:", heading, "Error:", error)
 
     if abs(error) < HEADING_TOL:
         stop()
