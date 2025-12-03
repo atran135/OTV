@@ -7,9 +7,7 @@ while True:
 
     # compute wrapped angle error
     error = desired_initial_heading - heading
-    if error > math.pi: error -= 2*math.pi
-    if error < -math.pi: error += 2*math.pi
-
+    
     print("Heading:", heading, "Error:", error)
 
     if abs(error) < HEADING_TOL:
