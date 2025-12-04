@@ -1,0 +1,22 @@
+from enes100 import enes100
+from machine import Pin, PWM
+from time import sleep
+import math
+# ============================
+#   ENES100 SETUP
+# ============================
+
+enes100.begin("towmaters", "seed", 345, 1120)
+sleep(0.5)
+
+yStart = enes100.y
+
+#checks if aruco is visible
+enes100.print(enes100.is_visible)
+enes100.print("starting y = " + str(yStart))
+while True:
+    enes100.print("y = " + str(enes100.y))
+    enes100.print("x = " + str(enes100.x))
+    enes100.print("theta = " + str(enes100.theta))
+    sleep(1)
+
