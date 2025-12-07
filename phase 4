@@ -1,0 +1,38 @@
+# =============================
+#   PHASE 4: DRIVE TO END
+# =============================
+
+enes100.print("Phase 2")
+while True:
+    x = enes100.x #Sets x to aruco markers reading
+    y = enes100.y #Sets y to aruco markers reading
+    
+    heading = enes100.theta
+
+    dx = 4 - x
+    dy = 0.25 - y
+    distance = math.sqrt(dx*dx + dy*dy)
+
+    if distance < POSITION_TOL:
+        stop()
+        #print("Arrived at target!")
+        enes100.print("Arrived at target!")
+        break
+
+    desired_heading = 0
+    error = desired_heading - heading
+
+    if abs(error) > HEADING_TOL:
+        # turn to correct heading
+        turn_speed = 50000
+        if error > 0:
+                    stop()
+            drive(-turn_speed, turn_speed)
+        else:
+            stop()
+            drive(turn_speed, -turn_speed)
+    #else:
+    stop()
+    drive(40000, 40000)
+
+    sleep(1)
