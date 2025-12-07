@@ -26,13 +26,19 @@ while True:
         # turn to correct heading
         turn_speed = 50000
         if error > 0:
+            stop()
             drive(-turn_speed, turn_speed)
         else:
+            stop()
             drive(turn_speed, -turn_speed)
+    #else:
+    if(yStart > 0.75):
+        stop()
+        right_shift(40000)
+        sleep(2)
     else:
-        if(yStart > 0.75):
-            right_shift(50000)
-        else:
-            left_shift(50000)
+        stop()
+        left_shift(40000)
+        sleep(2)
 
     sleep(1)
