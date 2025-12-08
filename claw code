@@ -1,84 +1,78 @@
 from machine import Pin, PWM
 from time import sleep
 
+# --- INPUT THAT TRIGGERS MOVEMENT ---
+trigger = Pin(5, Pin.IN)   # change pin if needed
+
 # --- SERVO OBJECTS ---
 servo1 = PWM(Pin(16), freq=50)   # ARM SERVO 1
 servo2 = PWM(Pin(12), freq=50)   # ARM SERVO 2
 servo3 = PWM(Pin(14), freq=50)   # CLAW SERVO
 
-# --- SERVO SPEED CONTROL ---
+# --- SPEED FUNCTION ---
 def set_speed(servo, speed):
-    """
-    speed = -1.0 (reverse) to 0 (stop) to +1.0 (forward)
-    """
     min_us = 500
     max_us = 2500
     pulse = min_us + (speed + 1) * (max_us - min_us) / 2
     duty = int((pulse / 20000) * 1023)
     servo.duty(duty)
 
-# -------------------------
-# TIMINGS FOR ARM SERVOS
-# -------------------------
-arm_fwd = 1.0
+# --- TIMINGS ---
+arm_fwd  = 1.0
 arm_stop = 0.5
-arm_rev = 1.0
+arm_rev  = 1.0
 
-# -------------------------
-# TIMINGS FOR CLAW SERVO (independent)
-# -------------------------
-claw_fwd = 0.8    # Forward duration for servo3
-claw_stop = 0.3   # Stop duration for servo3
-claw_rev = 0.6    # Reverse duration for servo3
+claw_fwd  = 0.8
+claw_stop = 0.3
+claw_rev  = 0.6
 
 # ---------------------------------------------------------
-# STEP 1: ARM SERVOS RUN ONCE
+# WAIT FOR TRIGGER
+# ---------------------------------------------------------
+print("Waiting for trigger...")
+
+while trigger.value() != 1:
+    sleep(0.05)
+
+print("Trigger detected! Starting movement...")
+
+# ---------------------------------------------------------
+# START ARM + CLAW AT SAME TIME
 # ---------------------------------------------------------
 
-# Forward
-set_speed(servo1, 1.0)
+# ---- THE “START” COMMANDS ----
+set_speed(servo1, 1.0)     # arm forward
 set_speed(servo2, -1.0)
-sleep(arm_fwd)
+set_speed(servo3, -1.0)    # claw forward
 
-# Stop
+# ---- LET THEM MOVE ----
+sleep(max(arm_fwd, claw_fwd))  # runs long enough for both
+
+# Stop everything
 set_speed(servo1, 0)
 set_speed(servo2, 0)
-sleep(arm_stop)
+set_speed(servo3, 0)
+sleep(arm_stop)  # short pause
 
-# Reverse
+# ---- ARM reverse ----
 set_speed(servo1, -1.0)
 set_speed(servo2, 1.0)
-sleep(arm_rev)
 
-# Stop
+# ---- CLAW reverse ----
+set_speed(servo3, 1.0)
+
+# Let both run long enough
+sleep(max(arm_rev, claw_rev))
+
+# Stop everything
 set_speed(servo1, 0)
 set_speed(servo2, 0)
-sleep(arm_stop)
-
-print("ARM servos finished.")
-
-# ---------------------------------------------------------
-# STEP 2: CLAW SERVO RUNS ONCE
-# ---------------------------------------------------------
-
-# Forward
-set_speed(servo3, -1.0)
-sleep(claw_fwd)
-
-# Stop
 set_speed(servo3, 0)
-sleep(claw_stop)
+sleep(0.2)
 
-# Reverse
-set_speed(servo3, 1.0)
-sleep(claw_rev)
+print("All servos finished.")
 
-# Stop
-set_speed(servo3, 0)
-sleep(claw_stop)
-
-print("CLAW servo finished.")
-
-# ---------------------------------------------------------
-# EVERYTHING STOPS HERE
-# ---------------------------------------------------------
+# Optionally stop PWM completely
+servo1.deinit()
+servo2.deinit()
+servo3.deinit()
