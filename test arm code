@@ -1,0 +1,47 @@
+from machine import Pin, PWM
+from time import sleep
+
+# --- SERVO OBJECTS ---
+servo1 = PWM(Pin(16), freq=50)   # ARM SERVO 1
+servo2 = PWM(Pin(12), freq=50)   # ARM SERVO 2
+
+# --- SERVO SPEED CONTROL ---
+def set_speed(servo, speed):
+    min_us = 500
+    max_us = 2500
+    pulse = min_us + (speed + 1) * (max_us - min_us) / 2
+    duty = int((pulse / 20000) * 1023)
+    servo.duty(duty)
+
+# --- TIMINGS ---
+arm_fwd  = 1.0
+arm_stop = 0.5
+arm_rev  = 1.0
+
+print("Starting ARM test...")
+
+# Forward
+set_speed(servo1, 1.0)
+set_speed(servo2, -1.0)
+sleep(arm_fwd)
+
+# Stop
+set_speed(servo1, 0)
+set_speed(servo2, 0)
+sleep(arm_stop)
+
+# Reverse
+set_speed(servo1, -1.0)
+set_speed(servo2, 1.0)
+sleep(arm_rev)
+
+# Stop
+set_speed(servo1, 0)
+set_speed(servo2, 0)
+sleep(arm_stop)
+
+print("ARM test complete.")
+
+# Optional: release PWM
+servo1.deinit()
+servo2.deinit()
