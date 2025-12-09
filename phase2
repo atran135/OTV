@@ -24,21 +24,15 @@ while True:
 
     if abs(error) > HEADING_TOL:
         # turn to correct heading
-        turn_speed = 50000
+        turn_speed = 45000
         if error > 0:
             stop()
             drive(-turn_speed, turn_speed)
         else:
             stop()
             drive(turn_speed, -turn_speed)
+            
     #else:
-    if(yStart > 0.75):
-        stop()
-        right_shift(40000)
-        sleep(2)
-    else:
-        stop()
-        left_shift(40000)
-        sleep(2)
-
+    stop()
+    drive(35000,35000)
     sleep(1)
