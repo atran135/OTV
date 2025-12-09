@@ -16,7 +16,7 @@ while True:
         sleep(0.5)
         break
 
-    turn_speed = 35000
+    turn_speed = 45000
 
     if error > 0:
         stop()
