@@ -16,16 +16,15 @@ while True:
         sleep(0.5)
         break
 
-    turn_speed = 50000
+    turn_speed = 35000
 
     if error > 0:
         stop()
         drive(-turn_speed, turn_speed)   # turn left
-        sleep(0.1)
+        sleep(0.3)
     else:
         stop()
         drive(turn_speed, -turn_speed)   # turn right
-        sleep(0.1)
+        sleep(0.3)
     sleep(0.5)
 sleep(5)
-enes100.print("theta:", enes100.theta)
